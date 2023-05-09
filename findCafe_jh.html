@@ -53,32 +53,11 @@
     <br>
     <div class="btn-container">
     	<div class="find-button1">Start!</div>
-        <script>
-            function includeHTML() {
-                var z, i, elmnt, file, xhttp;
-                z = document.getElementsByTagName("*");
-                for (i = 0; i < z.length; i++) {
-                    elmnt = z[1];
-                file = elmnt.getAttribute("page2.html");
-                if(file) {
-                    xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                        if(this.readyState == 4 && this.status == 200) {
-                            elmnt.innerHTML = this.responseText;
-                            elmnt.removeAttribute("page2.html");
-                            includeHTML();
-                    }
-                }
-                xhttp.open("GET", file, true);
-                xhttp.send();
-                return;
-                }
+        function menuClick(){
+
+            document.getElementById("find-button1").innerHTML='<object type="text/html" data="page2.html"></object>';
+            
             }
-        }
-        
-        includeHTML();
-        
-        </script>
     </div>
 
 </body>
