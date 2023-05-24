@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>오늘 뭐 먹지?</title>
+    <style>
+        button {
+            width: 120px;
+            height: 60px;
+            background-color: lightblue;
+        }
+        .page {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; 
+        text-align: center;
+        min-height: 100vh;
+    }
+
+        .find-button {
+            text-align: center;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .find-button1 {
+            width: 150px;
+            height: 150px;
+            border-radius: 500px;
+            text-align: center;
+            line-height: 200px;
+            font-size: 16px;
+            border: 2px solid black;
+            background: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu {
+            display: inline-block;
+            border: 2px solid black;
+        }
+
+        #menu {
+            border: 1px solid black;
+            background-color: lightblue;
+            text-align: center;
+            width: 300px;
+            height: 30px;
+            padding: 10px;
+        }
+
+        #selectedFood {
+            width: 314px;
+            height: 50px;
+        }
+
+        .menuPic {
+            display: inline-block;
+            border: 2px dotted red;
+            width: 500px;
+            height: 300px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loc {
+            border: 2px solid black;
+            display: inline-block;
+        }
+
+        #loc {
+            border: 1px solid black;
+            background-color: lightblue;
+            text-align: center;
+            width: 300px;
+            height: 30px;
+            padding: 10px;
+        }
+
+        #location {
+            border: 1px solid black;
+            width: 316px;
+            height: 50px;
+        }
+
+        #resetBtn {
+            width: 100px;
+            height: 100px;
+            border-radius: 100px;
+            text-align: center;
+            line-height: 200px;
+            font-size: 16px;
+            border: 2px solid black;
+            background: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <script>
+        function showPage(pageId) {
+            var pages = document.querySelectorAll('.page');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].style.display = 'none';
+            }
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        function getRandomFood(category) {
+            // 선택된 카테고리에 따른 폴더 경로 설정
+            var folderPath;
+            if (category === '전체') {
+                folderPath = '음식목록';
+            } else {
+                folderPath = '음식목록/' + category;
+            }
+
+            // 폴더에서 음식 사진 파일 목록 가져오기
+            fetch('/list-files?folder=' + encodeURIComponent(folderPath))
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    // 음식 사진 파일 목록에서 랜덤하게 파일 선택
+                    var randomFileName = data[Math.floor(Math.random() * data.length)];
+                    var imagePath = folderPath + '/' + randomFileName;
+
+                    // 선택된 음식 표시 함수 호출
+                    displayRandomFood(imagePath);
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        }
+
+        function displayRandomFood(imagePath) {
+            // 음식 사진 표시
+            var imgElement = document.querySelector('.menuPic img');
+            imgElement.src = imagePath;
+        }
+    </script>
+</head>
+<body>
+    <div class="page" id="page1">
+        <center><h1>오늘 뭐 먹지?</h1></center>
+        <br>
+
+        <div class="find-button">
+            <button type="button" class="button">전체</button>
+            <button type="button" class="button">한식</button>
+            <button type="button" class="button">양식</button>
+            <button type="button" class="button">중식</button>
+            <button type="button" class="button">일식</button>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="btn-container">
+            <div class="find-button1" onclick="showPage('page2')">Start!</div>
+        </div>
+    </div>
+
+    <div class="page" id="page2" style="display: none;">
+        <h1>메뉴 선택 결과</h1>
+
+        <div class="find-button">
+            <button type="button" class="button">전체</button>
+            <button type="button" class="button">한식</button>
+            <button type="button" class="button">양식</button>
+            <button type="button" class="button">중식</button>
+            <button type="button" class="button">일식</button>
+        </div>
+        <br>
+        <br>
+        <div class="menu">
+            <div id="menu">음식 이름</div>
+            <input id="selectedFood">
+        </div>
+        <br>
+        <br>
+        <br>
+
+        <div class="menuPic">
+            <img src="img.gif" alt="음식 사진 업로드">
+        </div>
+        <br>
+        <br>
+        <br>
+
+
+        <div class="loc">
+            <div id="loc">위치 안내</div>
+            <input id="location">
+        </div>
+        <br>
+        <br>
+        <div class="btn-container">
+            <button id="resetBtn" onclick="showPage('page1')">
+                리롤버튼 <!-- 누르면 1페이지로 -->
+            </button>
+        </div>
+    </div>
+
+    <script>
+        showPage('page1'); 
+    </script>
+</body>
+</html>
+
