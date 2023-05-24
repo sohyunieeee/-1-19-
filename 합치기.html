@@ -3,10 +3,13 @@
 <head>
     <title>오늘 뭐 먹지?</title>
     <style>
-        button {
+        .button {
             width: 120px;
             height: 60px;
             background-color: lightblue;
+        }
+        .button:active{
+            background-color: red;
         }
         .page {
         display: none;
@@ -116,15 +119,19 @@
                 pages[i].style.display = 'none';
             }
             document.getElementById(pageId).style.display = 'block';
+
+            if(pageId=='page2'){
+                getRandomFood(category)
+            }
         }
 
         function getRandomFood(category) {
             // 선택된 카테고리에 따른 폴더 경로 설정
             var folderPath;
             if (category === '전체') {
-                folderPath = '음식목록';
+                folderPath = 'food_list/전체';
             } else {
-                folderPath = '음식목록/' + category;
+                folderPath = 'food_list/' + category;
             }
 
             // 폴더에서 음식 사진 파일 목록 가져오기
@@ -134,8 +141,8 @@
                 })
                 .then(function (data) {
                     // 음식 사진 파일 목록에서 랜덤하게 파일 선택
-                    var randomFileName = data[Math.floor(Math.random() * data.length)];
-                    var imagePath = folderPath + '/' + randomFileName;
+                    var randomFileName = Math.floor(Math.random() * data.length)+1;
+                    var imagePath = folderPath + '/' + randomFileName+'.jpg';
 
                     // 선택된 음식 표시 함수 호출
                     displayRandomFood(imagePath);
