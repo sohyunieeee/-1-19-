@@ -146,7 +146,7 @@
 
                     // 선택된 음식 표시 함수 호출
                     displayRandomFood(imagePath);
-                })
+                })//(전 사진 파일이 없어서 시도는 못하겠는데 data.length를 해서 함수가 기하급수적으로 늘어서 안되는거 같은데요?
                 .catch(function (error) {
                     console.error('Error:', error);
                 });
