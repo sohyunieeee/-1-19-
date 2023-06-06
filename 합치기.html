@@ -113,6 +113,8 @@
         }
     </style>
     <script>
+        var category = "";
+
         function showPage(pageId) {
             var pages = document.querySelectorAll('.page');
             for (var i = 0; i < pages.length; i++) {
@@ -121,14 +123,14 @@
             document.getElementById(pageId).style.display = 'block';
 
             if(pageId=='page2'){
-                getRandomFood(category)
+                getRandomFood();
             }
         }
 
-        function getRandomFood(category) {
+        function getRandomFood() {
             // 선택된 카테고리에 따른 폴더 경로 설정
             var folderPath;
-            if (category === '전체') {
+            if (category == '전체' || category == "") {
                 folderPath = 'food_list/전체';
             } else {
                 folderPath = 'food_list/' + category;
@@ -157,6 +159,10 @@
             var imgElement = document.querySelector('.menuPic img');
             imgElement.src = imagePath;
         }
+
+        function setCategory(selectedCategory) {
+            category = selectedCategory;
+        }
     </script>
 </head>
 <body>
@@ -165,11 +171,11 @@
         <br>
 
         <div class="find-button">
-            <button type="button" class="button">전체</button>
-            <button type="button" class="button">한식</button>
-            <button type="button" class="button">양식</button>
-            <button type="button" class="button">중식</button>
-            <button type="button" class="button">일식</button>
+            <button type="button" class="button" onclick="setCategory('전체')">전체</button>
+            <button type="button" class="button" onclick="setCategory('한식')">한식</button>
+            <button type="button" class="button" onclick="setCategory('양식')">양식</button>
+            <button type="button" class="button" onclick="setCategory('중식')">중식</button>
+            <button type="button" class="button" onclick="setCategory('일식')">일식</button>
         </div>
         <br>
         <br>
