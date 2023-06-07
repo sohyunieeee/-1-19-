@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>오늘 뭐 먹지?</title>
+    <style>
+        .button {
+            width: 120px;
+            height: 60px;
+            background-color: lightblue;
+        }
+        .button:active{
+            background-color: red;
+        }
+        .page {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; 
+        text-align: center;
+        min-height: 100vh;
+    }
+
+        .find-button {
+            text-align: center;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .find-button1 {
+            width: 150px;
+            height: 150px;
+            border-radius: 500px;
+            text-align: center;
+            line-height: 200px;
+            font-size: 16px;
+            border: 2px solid black;
+            background: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu {
+            display: inline-block;
+            border: 2px solid black;
+        }
+
+        #menu {
+            border: 1px solid black;
+            background-color: lightblue;
+            text-align: center;
+            width: 300px;
+            height: 30px;
+            padding: 10px;
+        }
+
+        .selectedFoodName {
+            width: 314px;
+            height: 50px;
+            text-align: center;
+        }
+
+        .menuPic {
+            display: inline-block;
+            border: 2px dotted red;
+            width: 500px;
+            height: 300px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loc {
+            border: 2px solid black;
+            display: inline-block;
+        }
+
+        #loc {
+            border: 1px solid black;
+            background-color: lightblue;
+            text-align: center;
+            width: 300px;
+            height: 30px;
+            padding: 10px;
+        }
+
+        #location {
+            border: 1px solid black;
+            width: 316px;
+            height: 50px;
+        }
+
+        #resetBtn {
+            width: 100px;
+            height: 100px;
+            border-radius: 100px;
+            text-align: center;
+            line-height: 200px;
+            font-size: 16px;
+            border: 2px solid black;
+            background: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <script>
+        var category = "";
+        var selectedfood = "";
+        var selectedfoodname = "";
+
+        var chinaFood = new Array();
+        var japanFood = new Array();
+        var koreaFood = new Array();
+        var westernFood = new Array();
+        var allFood = new Array();
+
+        function initFood() {
+            chinaFood = [['자장면','china_jajangmyeon'], ['짬뽕','china_jjamppong'], ['양꼬치','china_lambskewer'], ['마라탕','china_malatang'], ['깐쇼새우','china_spicyshrimp']];
+            japanFood = [['초밥','japan_chobap'], ['오므라이스','japan_omurice'], ['돈가스','japan_porkcutlet'], ['라멘','japan_ramen'], ['샤브샤브','japan_shabushabu'], ['우동','japan_udon'], ['야끼소바','japan_yakisoba']];
+            koreaFood = [['백반','korea_bakban'], ['족발','korea_jokbal'], ['갈비찜','korea_galbijjim'], ['김치찌개','korea_gimchijjigae'], ['곱창','korea_gopchang'], ['제육볶음','korea_jeayuk'], ['낙지볶음','korea_nakji'], ['해물파전','korea_seafoodpancake'], ['삼겹살','korea_sgs']];
+            westernFood = [['버거','western_burger'], ['카프리제','western_caprese'], ['크로아상','western_croissant'], ['파스타','western_pasta'],['피자','western_pizza'], ['수플레','western_souffle']];
+            allFood = chinaFood.concat(japanFood, koreaFood, westernFood);   
+        }
+        
+        function showPage(pageId) {
+            //initFood();
+            var pages = document.querySelectorAll('.page');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].style.display = 'none';
+            }
+            document.getElementById(pageId).style.display = 'block';
+
+            if(pageId=='page2'){
+                getRandomFood();
+            }
+        }
+
+        function getRandomFood() {
+            // 선택된 카테고리에 따른 폴더 경로 설정
+            var folderPath = 'food_list/';
+
+            if (category == "" || category == undefined) {
+                category = 'all';
+            }
+            folderPath = folderPath + category;
+            
+            //선택한 음식 카테고리에서 random하게 파일 선택하기
+            var foodlist_len = 0;
+            var num;
+            if (category == 'all'){
+                foodlist_len = allFood.length;
+                num = Math.floor(Math.random() * foodlist_len) +1;
+                selectedfood = allFood[num][1];
+                selectedfoodname = allFood[num][0];
+                imagePath = folderPath + '/'+ allFood[num][1] + '.jpg';
+            }else if (category == 'china'){
+                foodlist_len = chinaFood.length;
+                num = Math.floor(Math.random() * foodlist_len) +1;
+                selectedfood = chinaFood[num][1];
+                selectedfoodname = chinaFood[num][0];
+                imagePath = folderPath + '/'+ chinaFood[num][1] + '.jpg';
+            }else if (category == 'japan'){
+                foodlist_len = japanFood.length;
+                num = Math.floor(Math.random() * foodlist_len) +1;
+                selectedfood = japanFood[num][1];
+                selectedfoodname = japanFood[num][0];
+                imagePath = folderPath + '/'+ japanFood[num][1] + '.jpg';
+            }else if (category == 'korea'){
+                foodlist_len = koreaFood.length;
+                num = Math.floor(Math.random() * foodlist_len) +1;
+                selectedfood = koreaFood[num][1];
+                selectedfoodname = koreaFood[num][0];
+                imagePath = folderPath + '/'+ koreaFood[num][1] + '.jpg';
+            }else if (category == 'western'){
+                foodlist_len = westernFood.length;
+                num = Math.floor(Math.random() * foodlist_len) +1;
+                selectedfood = westernFood[num][1];
+                selectedfoodname = westernFood[num][0];
+                imagePath = folderPath + '/'+ westernFood[num][1] + '.jpg';
+            }
+            //alert ('cateogry :' + category + ' size :' + foodlist_len);
+            //alert(selectedfood);
+            //alert(selectedfoodname);
+            //alert(imagePath);            
+
+            displayRandomFood(imagePath);
+
+            // 폴더에서 음식 사진 파일 목록 가져오기
+            /*
+            fetch('./list-files?folder=food_list/all/')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    // 음식 사진 파일 목록에서 랜덤하게 파일 선택
+                    var randomFileName = Math.floor(Math.random() * data.length)+1;
+                    var imagePath = folderPath + '/' + randomFileName+'.jpg';
+
+                    // 선택된 음식 표시 함수 호출
+                    displayRandomFood(imagePath);
+                })//(전 사진 파일이 없어서 시도는 못하겠는데 data.length를 해서 함수가 기하급수적으로 늘어서 안되는거 같은데요?
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+            */
+        }
+
+        function displayRandomFood(imagePath) {
+            //음식 이름 표시 - selectedfoodname 변수에 이름 담아놨어요. 화면에 보이게 해주세요----
+            //var imgName = document.querySelector('');
+            //imgName.??? = selectedfoodname;
+
+            // 음식 사진 표시
+            var imgElement = document.querySelector('.menuPic img');
+            imgElement.src = imagePath;
+        }
+
+        function setCategory(selectedCategory) {
+            category = selectedCategory;
+        }
+
+        function location(location){
+            var location = document.createElement('span');
+            if (selectedfood =="china_jajangmyeon"){
+                content.innerHTML = '"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d6325.382341480368!2d127.03100204369164!3d37.56233926447505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOykkeq1reynkQ!5e0!3m2!1sko!2skr!4v1684929830714!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }
+            if (selectedfood =="china_jjamppong"){
+                content.innerHTML = '"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d6325.382341480368!2d127.03100204369164!3d37.56233926447505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOykkeq1reynkQ!5e0!3m2!1sko!2skr!4v1684929830714!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+            }
+            if (selectedfood =="china_lambskewer"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d6325.382360471735!2d127.03100204293223!3d37.56233904079178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOyWkeq8rOy5mA!5e0!3m2!1sko!2skr!4v1684929870977!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }
+            if (selectedfood =="china_malatang"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d6325.382379463105!2d127.03100204217276!3d37.562338817108476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOuniOudvO2DlQ!5e0!3m2!1sko!2skr!4v1684929909312!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+            }
+            if (selectedfood =="china_spicyshrimp"){
+                content.innerHTML ='없음'
+                document.querySelector('loc').appendchild(location);
+            }
+            if (selectedfood =="japan_chobap"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d7151.4917822657835!2d127.0336316924277!3d37.56191964276495!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOy0iOuwpQ!5e0!3m2!1sko!2skr!4v1684930004835!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }
+            if (selectedfood =="japan_omurice"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d4984.5251575190605!2d127.03171887035734!3d37.559586755483025!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOyYpOuvgOudvOydtOyKpA!5e0!3m2!1sko!2skr!4v1684930075059!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }
+            if (selectedfood =="japan_porkcutlet"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d6325.616061064493!2d127.03171886912617!3d37.55958639291783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOuPiOy5tOy4oA!5e0!3m2!1sko!2skr!4v1684930124364!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }  
+            if (selectedfood =="japan_ramen"){
+                content.innerHTML =='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d6325.616042074809!2d127.0317188698858!3d37.559586616595254!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOudvOupmOynkQ!5e0!3m2!1sko!2skr!4v1684930107420!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            } 
+             if (selectedfood =="japan_shabushabu"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d6325.616080054174!2d127.03171886836665!3d37.55958616924044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOyDpOu4jOyDpOu4jA!5e0!3m2!1sko!2skr!4v1684930141034!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }  
+            if (selectedfood =="japan_udon"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d3162.7929896196247!2d127.03376407578536!3d37.55994072204028!2m3!1f0!2f0!3>"'
+                document.querySelector('loc').appendchild(location);
+            }  
+            if (selectedfood =="japan_yakisobag"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d50622.93148682413!2d127.02249560811697!3d37.533071493805835!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOyVvOuBvOyGjOuwlA!5e0!3m2!1sko!2skr!4v1684930188075!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }  
+            if (selectedfood =="korea_bakban"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12651.704136431019!2d127.02944051042061!3d37.5568064026541!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOuwseuwmA!5e0!3m2!1sko!2skr!4v1684930230962!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+               document.querySelector('loc').appendchild(location);
+              }
+                if (selectedfood =="korea_jokbal"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12651.704288335834!2d127.02944050738225!3d37.55680550796249!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOyhseuwnA!5e0!3m2!1sko!2skr!4v1684930261297!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="korea_galbijjim"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12651.704440240646!2d127.02944050434388!3d37.55680461327088!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOqwiOu5hOywnA!5e0!3m2!1sko!2skr!4v1684930277876!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="korea_gimchijjigae"){
+                content.innerHTML='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12651.704440240646!2d127.02944050434388!3d37.55680461327088!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOqwiOu5hOywnA!5e0!3m2!1sko!2skr!4v1684930277876!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+            }if (selectedfood =="korea_gopchang"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12651.704744050257!2d127.02944049826712!3d37.556802823887686!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOqzseywvQ!5e0!3m2!1sko!2skr!4v1684930325574!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="korea_jeayuk"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12290.781397549727!2d127.0308477746766!3d37.561374910468345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOygnOycoeuztuydjA!5e0!3m2!1sko!2skr!4v1684930358216!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="korea_nakji"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12650.928577547133!2d127.03084777180896!3d37.56137406595635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOuCmuyngOuztuydjA!5e0!3m2!1sko!2skr!4v1684930378410!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="korea_seafoodpancake"){
+                content.innerHTML='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12650.928729474139!2d127.03084776877085!3d37.561373171226805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOyghA!5e0!3m2!1sko!2skr!4v1684930390347!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="korea_sgs"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12650.928881401138!2d127.03084776573269!3d37.56137227649728!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOyCvOqyueyCtA!5e0!3m2!1sko!2skr!4v1684930409601!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="western_burger"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12650.929185255118!2d127.03084775965631!3d37.56137048703829!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIOy5tO2UhOumrOygnA!5e0!3m2!1sko!2skr!4v1684930442177!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="western_caprese"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12650.929337182099!2d127.03084775661809!3d37.561369592308814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIO2BrOuhnOyVhOyDgQ!5e0!3m2!1sko!2skr!4v1684930478395!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="western_croissant"){
+                content.innerHTML='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12650.929337182099!2d127.03084775661809!3d37.561369592308814!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIO2BrOuhnOyVhOyDgQ!5e0!3m2!1sko!2skr!4v1684930478395!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="western_pasta"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12650.929489109081!2d127.03084775357986!3d37.56136869757932!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIO2MjOyKpO2DgA!5e0!3m2!1sko!2skr!4v1684930496599!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+            }if (selectedfood =="western_pizza"){
+                content.innerHTML ='"https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d12650.929641036055!2d127.0308477505417!3d37.56136780284985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z7JmV7Iut66asIO2UvOyekA!5e0!3m2!1sko!2skr!4v1684930512911!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"'
+                document.querySelector('loc').appendchild(location);
+        
+            }if (selectedfood =="western_souffle"){
+                content.innerHTML ="없음"
+                document.querySelector('loc').appendchild(location);
+            
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="page" id="page1">
+        <center><h1>오늘 뭐 먹지?</h1></center>
+        <br>
+        <script>initFood();</script>
+        <div class="find-button">
+            <button type="button" class="button" onclick="setCategory('all')">전체</button>
+            <button type="button" class="button" onclick="setCategory('korea')">한식</button>
+            <button type="button" class="button" onclick="setCategory('western')">양식</button>
+            <button type="button" class="button" onclick="setCategory('china')">중식</button>
+            <button type="button" class="button" onclick="setCategory('japan')">일식</button>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="btn-container">
+            <div class="find-button1" onclick="showPage('page2')">Start!</div>
+        </div>
+    </div>
+
+    <div class="page" id="page2" style="display: none;">
+        <h1>메뉴 선택 결과</h1>
+
+        <div class="find-button">
+            <button type="button" class="button" onclick="setCategory('all')">전체</button>
+            <button type="button" class="button" onclick="setCategory('all')">한식</button>
+            <button type="button" class="button" onclick="setCategory('all')">양식</button>
+            <button type="button" class="button" onclick="setCategory('all')">중식</button>
+            <button type="button" class="button" onclick="setCategory('all')">일식</button>
+        </div>
+        <br>
+        <br>
+        <div class="menu">
+            <div id="menu">음식 이름</div>
+            <input id="selectedFoodName">
+        </div>
+        <br>
+        <br>
+        <br>
+
+        <div class="menuPic">
+            <img src="img.gif" alt="음식 사진 업로드">
+        </div>
+        <br>
+        <br>
+        <br>
+
+
+        <div class="loc">
+            <div id="loc">위치 안내</div>
+            <input id="location">
+        </div>
+        <br>
+        <br>
+        <div class="btn-container">
+            <button id="resetBtn" onclick="showPage('page1')">
+                리롤버튼 <!-- 누르면 1페이지로 -->
+            </button>
+        </div>
+    </div>
+
+    <script>
+        showPage('page1'); 
+    </script>
+</body>
+</html>
+
